@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>카멜 / 스네이크 변환 실행기</title>
+</head>
+<body>
+  <h3>카멜 / 스네이크 변환기 (오프라인 사용 가능)</h3>
+  <textarea id="src" rows="10" cols="40" placeholder="변환할 값 입력 (여러 줄 가능)"></textarea>
+  <br>
+  <button type="button" onclick="convert(true)">카멜 변환</button>
+  <button type="button" onclick="convert(false)">스네이크 변환</button>
+  <br>
+  <textarea id="out" rows="10" cols="40" readonly></textarea>
+
+  <script>
+    function convert(camel) {
+      const src = document.getElementById("src");
+      const out = document.getElementById("out");
+
+      out.value = src.value.split(/\r?\n/).map(line => {
+        const words = line.trim()
+          .replace(/([A-Z]+)([A-Z][a-z])/g, "$1_$2")
+          .replace(/([a-z0-9])([A-Z])/g, "$1_$2")
+          .toLowerCase().split(/[\s_-]+/).filter(Boolean);
+
+        return camel
+          ? words.map((w, i) => i ? w[0].toUpperCase() + w.slice(1) : w).join("")
+          : words.join("_");
+      }).join("\n");
+    }
+  </script>
+</body>
+</html>
